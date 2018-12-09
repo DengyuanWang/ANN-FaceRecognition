@@ -1,7 +1,6 @@
 classdef Node
     properties
         Layer_index;
-        Node_index;
         LearningRate;
         Weight;%n*1 matrix
         In;
@@ -10,11 +9,16 @@ classdef Node
         Stashed_Weight;
     end
     methods
-        function obj = Node(outdimension,Layer_index, Node_index)
+        function obj = Node(outdimension,Layer_index,out_tag)
             obj.Layer_index = Layer_index;
-            obj.Node_index = Node_index;
-            obj.Weight = rand(outdimension,1);
-            obj.Stashed_Weight = obj.Weight;
+            if nargin>2%more than 2 input arguments
+                obj.Weight = ones(outdimension,1);
+                obj.Stashed_Weight = obj.Weight;
+            else
+                obj.Weight = rand(outdimension,1);
+                obj.Stashed_Weight = obj.Weight;
+            end
+            
             obj.In = 0;
             obj.Out = activation(obj.In);
             obj.Stashed_Error = 0;
@@ -23,11 +27,7 @@ classdef Node
             % update weight
             obj.Weight = obj.Stashed_Weight;
             obj.In = in;
-            if(obj.Node_index==1)%bias node
-                obj.Out = 1;
-            else
-                obj.Out = activation(obj.In);
-            end
+            obj.Out = activation(obj.In);
         end
         function obj = subWeight(obj,delta_weights)
              obj.Stashed_Weight = obj.Stashed_Weight - delta_weights{1};
