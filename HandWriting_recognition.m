@@ -74,9 +74,9 @@ classdef HandWriting_recognition
 
             for i=1:length(Batches)
                 fprintf('rate:%d/%d\n',i,length(Batches));
-                delta = repmat({0},batch_size,1);
+                delta = repmat({0},length(Batches),1);
                 batch = Batches{i};
-                parfor j=1:batch_size
+                parfor j=1:length(batch)
                     tmp = batch{j}
                     t = net1.backpropagation(tmp{1},tmp{2});
                     delta{j} = t.get_deltatheta();
@@ -86,7 +86,7 @@ classdef HandWriting_recognition
                 for j=1:length(delta)
                     sample = delta{j};
                     for k=1:length(sample)
-                        result{k} = result{k}+ sample{k}./batch_size;
+                        result{k} = result{k}+ sample{k}./length(Batches);
                     end
                 end
                 net1 = net1.set_theta(result);
@@ -127,7 +127,7 @@ classdef HandWriting_recognition
                 Test = Dataset(index_test);
                 obj.Train_dataset = Train;
                 obj.Test_dataset =  Test;
-                accuracy = [accuracy obj.validate_on_current_data()];
+                accuracy = [accuracy obj.validate_on_current_data()]
                 fprintf('%d/n',i*20);
             end
             accuracy = mean(accuracy);

@@ -10,7 +10,7 @@ function accuracy = main()
         load('Saver.mat');
     end
     accuracy = HR.Five_fold_Cross_validation();
-
+    save('Saver.mat','HR','-v7.3');
 %     X = rand(1,2000);Y = zeros(1,62);
 %     Y(1) =1;
 %     InputLayer = size(X,2);
